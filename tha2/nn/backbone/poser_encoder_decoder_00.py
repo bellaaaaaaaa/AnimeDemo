@@ -30,7 +30,10 @@ class PoserEncoderDecoder00Args(PoserArgs00):
         self.max_channels = max_channels
         self.num_bottleneck_blocks = num_bottleneck_blocks
         self.bottleneck_image_size = bottleneck_image_size
-        assert bottleneck_image_size > 1
+        try:
+            assert bottleneck_image_size > 1, "Bottleneck image size needs to be > 1"
+        except AssertionError as msg:
+            print(msg)
 
         if block_args is None:
             self.block_args = BlockArgs(
@@ -65,7 +68,10 @@ class PoserEncoderDecoder00(Module):
                 block_args=args.block_args))
             current_image_size = next_image_size
             current_num_channels = next_num_channels
-        assert len(self.downsample_blocks) == self.num_levels
+        try:
+            assert len(self.downsample_blocks) == self.num_levels, "Downsample blocks must be the same with number of levels"
+        except AssertionError as msg:
+            print(msg)
 
         self.bottleneck_blocks = ModuleList()
         self.bottleneck_blocks.append(create_conv3_block_from_block_args(

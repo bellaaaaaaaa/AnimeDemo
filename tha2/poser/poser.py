@@ -23,14 +23,21 @@ class PoseParameterGroup:
                  discrete: bool = False,
                  default_value: float = 0.0,
                  range: Optional[Tuple[float, float]] = None):
-        assert arity == 1 or arity == 2
+        try:
+            assert arity == 1 or arity == 2, "Arity number must be 1 or 2"
+        except AssertionError as msg:
+            print(msg)
         if range is None:
             range = (0.0, 1.0)
         if arity == 1:
             parameter_names = [group_name]
         else:
             parameter_names = [group_name + "_left", group_name + "_right"]
-        assert len(parameter_names) == arity
+        try:
+            assert len(
+                parameter_names) == arity, "Length of parameter names must be the same as arity number"
+        except AssertionError as msg:
+            print(msg)
 
         self.parameter_names = parameter_names
         self.range = range
@@ -80,7 +87,10 @@ class PoseParameters:
         raise RuntimeError("Cannot find parameter with name %s" % name)
 
     def get_parameter_name(self, index: int) -> str:
-        assert index >= 0 and index < self.get_parameter_count()
+        try:
+            assert index >= 0 and index < self.get_parameter_count()
+        except AssertionError as msg:
+            print(msg)
 
         for group in self.pose_parameter_groups:
             if index < group.get_arity():

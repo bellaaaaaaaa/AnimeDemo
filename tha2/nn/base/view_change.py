@@ -19,7 +19,10 @@ class ViewImageAsVector(Module):
         super().__init__()
 
     def forward(self, x: Tensor):
-        assert x.dim() == 4
+        try:
+            assert x.dim() == 4, "Dimension of x must be 4"
+        except AssertionError as msg:
+            print(msg)
         n, c, w, h = x.shape
         return x.view(n, c * w * h)
 
@@ -29,7 +32,10 @@ class ViewVectorAsMultiChannelImage(Module):
         super().__init__()
 
     def forward(self, x: Tensor):
-        assert x.dim() == 2
+        try:
+            assert x.dim() == 2, "Dimension of x must be 2"
+        except AssertionError as msg:
+            print(msg)
         n, c = x.shape
         return x.view(n, c, 1, 1)
 
@@ -39,6 +45,9 @@ class ViewVectorAsOneChannelImage(Module):
         super().__init__()
 
     def forward(self, x: Tensor):
-        assert x.dim() == 2
+        try:
+            assert x.dim() == 2, "Dimension of x must be 2"
+        except AssertionError as msg:
+            print(msg)
         n, c = x.shape
         return x.view(n, 1, c, 1)

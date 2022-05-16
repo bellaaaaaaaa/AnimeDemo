@@ -35,7 +35,11 @@ def linear_to_srgb(x):
 
 
 def image_linear_to_srgb(image):
-    assert image.shape[2] == 3 or image.shape[2] == 4
+    try:
+
+        assert image.shape[2] == 3 or image.shape[2] == 4, "Image shape needs to be 3 or 4"
+    except AssertionError as msg:
+        print(msg)
     if image.shape[2] == 3:
         return linear_to_srgb(image)
     else:
@@ -46,7 +50,10 @@ def image_linear_to_srgb(image):
 
 
 def image_srgb_to_linear(image):
-    assert image.shape[2] == 3 or image.shape[2] == 4
+    try:
+        assert image.shape[2] == 3 or image.shape[2] == 4, "Image shape needs to be 3 or 4"
+    except AssertionError as msg:
+        print(msg)
     if image.shape[2] == 3:
         return srgb_to_linear(image)
     else:
@@ -76,7 +83,8 @@ def optimizer_to_device(optim, device):
 def grid_change_to_numpy_image(torch_image, num_channels=3):
     height = torch_image.shape[1]
     width = torch_image.shape[2]
-    size_image = (torch_image[0, :, :] ** 2 + torch_image[1, :, :] ** 2).sqrt().view(height, width, 1).numpy()
+    size_image = (torch_image[0, :, :] ** 2 + torch_image[1,
+                  :, :] ** 2).sqrt().view(height, width, 1).numpy()
     hsv = cm.get_cmap('hsv')
     angle_image = hsv(((torch.atan2(
         torch_image[0, :, :].view(height * width),
@@ -92,13 +100,18 @@ def grid_change_to_numpy_image(torch_image, num_channels=3):
 
 
 def rgb_to_numpy_image(torch_image: Tensor, min_pixel_value=-1.0, max_pixel_value=1.0):
-    assert torch_image.dim() == 3
-    assert torch_image.shape[0] == 3
+    try:
+        assert torch_image.dim() == 3, "Dimension of torch image must be 3"
+        assert torch_image.shape[0] == 3, "Shape of torch image must be 3"
+    except AssertionError as msg:
+        print(msg)
     height = torch_image.shape[1]
     width = torch_image.shape[2]
 
-    reshaped_image = torch_image.numpy().reshape(3, height * width).transpose().reshape(height, width, 3)
-    numpy_image = (reshaped_image - min_pixel_value) / (max_pixel_value - min_pixel_value)
+    reshaped_image = torch_image.numpy().reshape(
+        3, height * width).transpose().reshape(height, width, 3)
+    numpy_image = (reshaped_image - min_pixel_value) / \
+        (max_pixel_value - min_pixel_value)
     return linear_to_srgb(numpy_image)
 
 
@@ -111,10 +124,11 @@ def rgba_to_numpy_image_greenscreen(torch_image: Tensor,
 
     numpy_image = (torch_image.numpy().reshape(4, height * width).transpose().reshape(height, width,
                                                                                       4) - min_pixel_value) \
-                  / (max_pixel_value - min_pixel_value)
+        / (max_pixel_value - min_pixel_value)
     rgb_image = linear_to_srgb(numpy_image[:, :, 0:3])
     a_image = numpy_image[:, :, 3]
-    rgb_image[:, :, 0:3] = rgb_image[:, :, 0:3] * a_image.reshape(a_image.shape[0], a_image.shape[1], 1)
+    rgb_image[:, :, 0:3] = rgb_image[:, :, 0:3] * \
+        a_image.reshape(a_image.shape[0], a_image.shape[1], 1)
     rgb_image[:, :, 1] = rgb_image[:, :, 1] + (1 - a_image)
 
     if not include_alpha:
@@ -124,16 +138,22 @@ def rgba_to_numpy_image_greenscreen(torch_image: Tensor,
 
 
 def rgba_to_numpy_image(torch_image: Tensor, min_pixel_value=-1.0, max_pixel_value=1.0):
-    assert torch_image.dim() == 3
-    assert torch_image.shape[0] == 4
+    try:
+        assert torch_image.dim() == 3, "Dimension of torch image must be 3"
+        assert torch_image.shape[0] == 4, "Shape of torch image must be 4"
+    except AssertionError as msg:
+        print(msg)
     height = torch_image.shape[1]
     width = torch_image.shape[2]
 
-    reshaped_image = torch_image.numpy().reshape(4, height * width).transpose().reshape(height, width, 4)
-    numpy_image = (reshaped_image - min_pixel_value) / (max_pixel_value - min_pixel_value)
+    reshaped_image = torch_image.numpy().reshape(
+        4, height * width).transpose().reshape(height, width, 4)
+    numpy_image = (reshaped_image - min_pixel_value) / \
+        (max_pixel_value - min_pixel_value)
     rgb_image = linear_to_srgb(numpy_image[:, :, 0:3])
     a_image = numpy_image[:, :, 3]
-    rgba_image = numpy.concatenate((rgb_image, a_image.reshape(height, width, 1)), axis=2)
+    rgba_image = numpy.concatenate(
+        (rgb_image, a_image.reshape(height, width, 1)), axis=2)
     return rgba_image
 
 
@@ -188,10 +208,12 @@ def save_pytorch_image(image, file_name):
         image = image.squeeze()
     if image.shape[0] == 4:
         numpy_image = rgba_to_numpy_image(image.detach().cpu())
-        pil_image = PIL.Image.fromarray(numpy.uint8(numpy.rint(numpy_image * 255.0)), mode='RGBA')
+        pil_image = PIL.Image.fromarray(numpy.uint8(
+            numpy.rint(numpy_image * 255.0)), mode='RGBA')
     else:
         numpy_image = rgb_to_numpy_image(image.detach().cpu())
-        pil_image = PIL.Image.fromarray(numpy.uint8(numpy.rint(numpy_image * 255.0)), mode='RGB')
+        pil_image = PIL.Image.fromarray(numpy.uint8(
+            numpy.rint(numpy_image * 255.0)), mode='RGB')
     os.makedirs(os.path.dirname(file_name), exist_ok=True)
     pil_image.save(file_name)
 
@@ -199,15 +221,18 @@ def save_pytorch_image(image, file_name):
 def convert_output_image_from_torch_to_numpy(output_image):
     if output_image.shape[2] == 2:
         h, w, c = output_image.shape
-        output_image = torch.transpose(output_image.reshape(h * w, c), 0, 1).reshape(c, h, w)
+        output_image = torch.transpose(
+            output_image.reshape(h * w, c), 0, 1).reshape(c, h, w)
     if output_image.shape[0] == 4:
         numpy_image = rgba_to_numpy_image(output_image)
     elif output_image.shape[0] == 1:
         c, h, w = output_image.shape
-        alpha_image = torch.cat([output_image.repeat(3, 1, 1) * 2.0 - 1.0, torch.ones(1, h, w)], dim=0)
+        alpha_image = torch.cat([output_image.repeat(
+            3, 1, 1) * 2.0 - 1.0, torch.ones(1, h, w)], dim=0)
         numpy_image = rgba_to_numpy_image(alpha_image)
     elif output_image.shape[0] == 2:
         numpy_image = grid_change_to_numpy_image(output_image, num_channels=4)
     else:
-        raise RuntimeError("Unsupported # image channels: %d" % output_image.shape[0])
+        raise RuntimeError("Unsupported # image channels: %d" %
+                           output_image.shape[0])
     return numpy_image
