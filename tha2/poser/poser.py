@@ -23,7 +23,6 @@ class PoseParameterGroup:
                  discrete: bool = False,
                  default_value: float = 0.0,
                  range: Optional[Tuple[float, float]] = None):
-        print(f"arity {arity}")
         try:
             assert arity == 1 or arity == 2, "Arity number must be 1 or 2"
         except AssertionError as msg:
