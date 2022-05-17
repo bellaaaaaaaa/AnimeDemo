@@ -376,6 +376,7 @@ class MainFrame(wx.Frame):
             image_file_name = os.path.join(
                 file_dialog.GetDirectory(), file_dialog.GetFilename())
             try:
+                # check if the new file exists before writing 
                 if os.path.exists(image_file_name):
                     message_dialog = wx.MessageDialog(self, f"Override {image_file_name}", "Manual Poser",
                                                       wx.YES_NO | wx.ICON_QUESTION)
