@@ -24,7 +24,6 @@ class PoseParameterGroup:
                  default_value: float = 0.0,
                  range: Optional[Tuple[float, float]] = None):
         print(f"arity {arity}")
-
         try:
             assert arity == 1 or arity == 2, "Arity number must be 1 or 2"
         except AssertionError as msg:
@@ -78,13 +77,13 @@ class PoseParameterGroup:
 class PoseParameters:
     def __init__(self, pose_parameter_groups: List[PoseParameterGroup]):
         self.pose_parameter_groups = pose_parameter_groups
+        print(f"pose_parameter_groups {pose_parameter_groups}")
 
     def get_parameter_index(self, name: str) -> int:
         index = 0
         for parameter_group in self.pose_parameter_groups:
             for param_name in parameter_group.parameter_names:
                 if name == param_name:
-                    print(f"parameter index {index}")
                     return index
                 index += 1
         raise RuntimeError("Cannot find parameter with name %s" % name)
