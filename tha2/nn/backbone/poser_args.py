@@ -9,6 +9,8 @@ from tha2.nn.base.util import BlockArgs
 
 STRIDE = 1
 PADDING = 1
+KERNEL = 3
+OUTCHANNELS = 1
 
 
 class PoserArgs00:
@@ -33,14 +35,24 @@ class PoserArgs00:
 
     def create_alpha_block(self):
         from torch.nn import Sequential
-        return Sequential(
-            create_conv3(
-                in_channels=self.start_channels,
-                out_channels=1,
-                bias=True,
-                initialization_method=self.block_args.initialization_method,
-                use_spectral_norm=False),
-            Sigmoid())
+        from torch.nn import Conv2d
+        from tha2.nn.base.util import wrap_conv_or_linear_module
+        
+        bias=True
+        initialization_method=self.block_args.initialization_method
+        use_spectral_norm=False
+
+        con2d = Conv2d(self.start_channels,
+                        OUTCHANNELS,
+                        kernel_size = KERNEL,
+                        stride=STRIDE,
+                        padding=PADDING,
+                        bias=bias)
+                        
+        ret_conv_3 = wrap_conv_or_linear_module(con2d, initialization_method, use_spectral_norm)
+        
+        sequence = Sequential(ret_conv_3, Sigmoid())
+        return sequence
 
     # def create_all_channel_alpha_block(self):
     #     from torch.nn import Sequential
