@@ -33,3 +33,15 @@ class BlockArgs:
 
     def wrap_module(self, module: Module) -> Module:
         return wrap_conv_or_linear_module(module, self.initialization_method, self.use_spectral_norm)
+
+    def set_initialization_method(self,x):
+        self.initialization_method = x
+    
+    def set_initialization_method(self,x):
+        self.initialization_method = x
+    
+    def set_initialization_method(self,x):
+        self.initialization_method = x
+    
+    def set_initialization_method(self,x):
+        self.initialization_method = x
