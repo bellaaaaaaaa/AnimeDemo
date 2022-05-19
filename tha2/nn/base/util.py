@@ -37,11 +37,11 @@ class BlockArgs:
     def set_initialization_method(self,x):
         self.initialization_method = x
     
-    def set_initialization_method(self,x):
-        self.initialization_method = x
+    def set_use_spectral_norm(self,x):
+        self.use_spectral_norm = x
     
-    def set_initialization_method(self,x):
-        self.initialization_method = x
+    def set_normalization_layer_factory(self,x):
+        self.normalization_layer_factory = x
     
-    def set_initialization_method(self,x):
-        self.initialization_method = x
+    def set_nonlinearity_factory(self,x):
+        self.nonlinearity_factory = x

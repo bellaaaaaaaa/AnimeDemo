@@ -172,6 +172,7 @@ def load_eyebrow_morphing_combiner(file_name: str):
 
 def load_face_morpher(file_name: str):
     fma = FaceMorpher08Args()
+    
     ba = BlockArgs()
     ba.set_initialization_method='he'
     ba.set_use_spectral_norm=False
