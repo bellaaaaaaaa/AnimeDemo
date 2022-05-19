@@ -32,26 +32,26 @@ class EyebrowMorphingCombiner00Args(PoserEncoderDecoder00Args):
             max_channels,
             block_args)
     
-    def set_image_size(self, x):
-        self.image_size = x
+    def set_image_size(self, image_size):
+        self.image_size = image_size
     
-    def set_image_channels(self, x):
-        self.image_channels = x
+    def set_image_channels(self, image_channels):
+        self.image_channels = image_channels
     
-    def set_start_channels(self, x):
-        self.start_channels = x
+    def set_start_channels(self, start_channels):
+        self.start_channels = start_channels
 
-    def set_num_pose_params(self, x):
-        self.num_pose_params = x
+    def set_num_pose_params(self, num_pose_params):
+        self.num_pose_params = num_pose_params
     
-    def set_bottleneck_image_size(self, x):
-        self.bottleneck_image_size = x
+    def set_bottleneck_image_size(self, bottleneck_image_size):
+        self.bottleneck_image_size = bottleneck_image_size
     
-    def set_num_bottleneck_blocks(self, x):
-        self.num_bottleneck_blocks = x
+    def set_num_bottleneck_blocks(self, num_bottleneck_blocks):
+        self.num_bottleneck_blocks = num_bottleneck_blocks
     
-    def set_max_channels(self, x):
-        self.max_channels = x
+    def set_max_channels(self, max_channels):
+        self.max_channels = max_channels
 
 
 class EyebrowMorphingCombiner00(BatchInputModule):

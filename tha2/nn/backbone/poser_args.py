@@ -7,6 +7,9 @@ from tha2.nn.base.nonlinearity_factory import ReLUFactory
 from tha2.nn.base.normalization import InstanceNorm2dFactory
 from tha2.nn.base.util import BlockArgs
 
+STRIDE = 1
+PADDING = 1
+
 
 class PoserArgs00:
     def __init__(self,
@@ -39,16 +42,33 @@ class PoserArgs00:
                 use_spectral_norm=False),
             Sigmoid())
 
+    # def create_all_channel_alpha_block(self):
+    #     from torch.nn import Sequential
+    #     return Sequential(
+    #         create_conv3(
+    #             in_channels=self.start_channels,
+    #             out_channels=self.output_image_channels,
+    #             bias=True,
+    #             initialization_method=self.block_args.initialization_method,
+    #             use_spectral_norm=False),
+    #         Sigmoid())
+
     def create_all_channel_alpha_block(self):
         from torch.nn import Sequential
-        return Sequential(
-            create_conv3(
-                in_channels=self.start_channels,
-                out_channels=self.output_image_channels,
-                bias=True,
-                initialization_method=self.block_args.initialization_method,
-                use_spectral_norm=False),
-            Sigmoid())
+        from torch.nn import Conv2d
+        from tha2.nn.base.util import wrap_conv_or_linear_module
+
+        in_channels=self.start_channels
+        out_channels=self.output_image_channels
+        bias=True
+        initialization_method=self.block_args.initialization_method
+        use_spectral_norm=False
+        ks = 3
+        con2d = Conv2d(in_channels, out_channels, kernel_size = ks, stride=STRIDE, padding=PADDING, bias=bias)
+
+        cc3 = wrap_conv_or_linear_module(con2d, initialization_method, use_spectral_norm)
+
+        return Sequential(cc3, Sigmoid())
 
     def create_color_change_block(self):
         return Sequential(

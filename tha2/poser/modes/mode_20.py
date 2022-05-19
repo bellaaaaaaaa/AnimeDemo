@@ -27,6 +27,7 @@ KEY_EYEBROW_MORPHING_COMBINER = "eyebrow_combiner"
 KEY_FACE_MORPHER = "face_morpher"
 KEY_FACE_ROTATER = "face_rotator"
 KEY_COMBINER = "combiner"
+FIXED_EYEBROW_ARITY = 2
 
 KEY_EYEBROW_DECOMPOSER_OUTPUT = "eyebrow_decomposer_output"
 KEY_EYEBROW_MORPHING_COMBINER_OUTPUT = "eyebrow_combiner_output"
@@ -210,12 +211,12 @@ def load_combiner(file_name: str):
 
 def get_pose_parameters():
     return PoseParameters.Builder() \
-        .add_parameter_group("eyebrow_troubled", PoseParameterCategory.EYEBROW, arity=2) \
-        .add_parameter_group("eyebrow_angry", PoseParameterCategory.EYEBROW, arity=2) \
-        .add_parameter_group("eyebrow_lowered", PoseParameterCategory.EYEBROW, arity=2) \
-        .add_parameter_group("eyebrow_raised", PoseParameterCategory.EYEBROW, arity=2) \
-        .add_parameter_group("eyebrow_happy", PoseParameterCategory.EYEBROW, arity=2) \
-        .add_parameter_group("eyebrow_serious", PoseParameterCategory.EYEBROW, arity=2) \
+        .add_parameter_group("eyebrow_troubled", PoseParameterCategory.EYEBROW, FIXED_EYEBROW_ARITY) \
+        .add_parameter_group("eyebrow_angry", PoseParameterCategory.EYEBROW, FIXED_EYEBROW_ARITY) \
+        .add_parameter_group("eyebrow_lowered", PoseParameterCategory.EYEBROW, FIXED_EYEBROW_ARITY) \
+        .add_parameter_group("eyebrow_raised", PoseParameterCategory.EYEBROW, FIXED_EYEBROW_ARITY) \
+        .add_parameter_group("eyebrow_happy", PoseParameterCategory.EYEBROW, FIXED_EYEBROW_ARITY) \
+        .add_parameter_group("eyebrow_serious", PoseParameterCategory.EYEBROW, FIXED_EYEBROW_ARITY) \
         .add_parameter_group("eye_wink", PoseParameterCategory.EYE, arity=2) \
         .add_parameter_group("eye_happy_wink", PoseParameterCategory.EYE, arity=2) \
         .add_parameter_group("eye_surprised", PoseParameterCategory.EYE, arity=2) \
