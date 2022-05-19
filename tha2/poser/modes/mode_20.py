@@ -134,7 +134,7 @@ def load_eyebrow_decomposer(file_name: str):
     ba.set_normalization_layer_factory = InstanceNorm2dFactory()
     ba.set_nonlinearity_factory = ReLUFactory(inplace=True)
 
-    eda = ()
+    eda = EyebrowDecomposer00Args()
     eda.set_image_size = 128
     eda.set_image_channels = 4
     eda.set_start_channels = 64
