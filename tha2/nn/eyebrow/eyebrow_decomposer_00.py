@@ -30,6 +30,24 @@ class EyebrowDecomposer00Args(PoserEncoderDecoder00Args):
             num_bottleneck_blocks,
             max_channels,
             block_args)
+    
+    def set_image_size(self, x):
+        self.image_size = x
+
+    def set_image_channels(self, x):
+        self.image_channels = x
+
+    def set_start_channels(self, x):
+        self.start_channels = x
+
+    def set_bottleneck_image_size(self, x):
+        self.bottleneck_image_size = x
+
+    def set_num_bottleneck_blocks(self, x):
+        self.num_bottleneck_blocks = x
+
+    def set_max_channels(self, x):
+        self.max_channels = x
 
 
 class EyebrowDecomposer00(BatchInputModule):

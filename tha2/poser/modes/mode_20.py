@@ -128,23 +128,24 @@ class FiveStepPoserComputationProtocol(CachedComputationProtocol):
 
 
 def load_eyebrow_decomposer(file_name: str):
-    factory = EyebrowDecomposer00Factory(
-        EyebrowDecomposer00Args(
-            image_size=128,
-            image_channels=4,
-            start_channels=64,
-            bottleneck_image_size=16,
-            num_bottleneck_blocks=6,
-            max_channels=512,
-            block_args=BlockArgs(
-                initialization_method='he',
-                use_spectral_norm=False,
-                normalization_layer_factory=InstanceNorm2dFactory(),
-                nonlinearity_factory=ReLUFactory(inplace=True))))
-    #print("Loading the eyebrow decomposer ... ", end="")
+    ba = BlockArgs()
+    ba.set_initialization_method = 'he'
+    ba.set_use_spectral_norm = False
+    ba.set_normalization_layer_factory = InstanceNorm2dFactory()
+    ba.set_nonlinearity_factory = ReLUFactory(inplace=True)
+
+    eda = ()
+    eda.set_image_size = 128,
+    eda.set_image_channels = 4
+    eda.set_start_channels = 64
+    eda.set_bottleneck_image_size = 16
+    eda.set_num_bottleneck_blocks = 6
+    eda.set_max_channels = 512
+    eda.block_args = ba
+
+    factory = EyebrowDecomposer00Factory(eda)
     module = factory.create()
     module.load_state_dict(torch_load(file_name))
-    #print("DONE!!!")
     return module
 
 def load_eyebrow_morphing_combiner(file_name: str):
@@ -165,10 +166,8 @@ def load_eyebrow_morphing_combiner(file_name: str):
     emc.block_args = ba
 
     factory = EyebrowMorphingCombiner00Factory(emc)
-    #print("Loading the eyebrow morphing conbiner ... ", end="")
     module = factory.create()
     module.load_state_dict(torch_load(file_name))
-    #print("DONE!!!")
     return module
 
 def load_face_morpher(file_name: str):
