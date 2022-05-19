@@ -135,7 +135,7 @@ def load_eyebrow_decomposer(file_name: str):
     ba.set_nonlinearity_factory = ReLUFactory(inplace=True)
 
     eda = ()
-    eda.set_image_size = 128,
+    eda.set_image_size = 128
     eda.set_image_channels = 4
     eda.set_start_channels = 64
     eda.set_bottleneck_image_size = 16
